@@ -3,6 +3,7 @@ import tkinter.filedialog as fd
 from random import randint
 from datetime import datetime as d
 import json
+import os
 import tkinter.messagebox as mb
 import glob
 
@@ -12,11 +13,11 @@ def create_btn():
     title = note_title_text.get(1.0, END)
     body = body_text.get(1.0, END)
     note_id = randint(1, 1000)
-    date = d.now().strftime("%Y-%m-%d %H:%M")
+    date = d.now().strftime("%m.%d.%Y %H:%M:%S")
     note = {"Id": note_id,
             "Date": date,
-            "Title": title,
-            "Body": body
+            "Title": title.strip(),
+            "Body": body.strip()
             }
     filetypes = (("json-файл", "*.json"),)
     filename = fd.asksaveasfilename(
@@ -36,7 +37,26 @@ def create_btn():
     return note
 
 
-def read():
+def reformat():
+    filename = 'Notes/' + name_file_text.get()
+    with open(filename, 'r',  encoding='utf-8') as file:
+        data = json.load(file)
+    data['Date'] = d.now().strftime("%m.%d.%Y %H:%M:%S")
+    data['Title'] = note_title_text.get(1.0, END).strip()
+    data['Body'] = body_text.get(1.0, END).strip()
+    with open(filename, '+w', encoding='utf-8') as f:
+        json.dump(data, f, indent=3, ensure_ascii=False)
+        msg = "Ваша заметка отредактирована"
+        mb.showinfo("Информация", msg)
+    name_file_text.delete(0, END)
+    note_title_text.delete(1.0, END)
+    body_text.delete(1.0, END)
+
+def select():
+    name_file_text.delete(0, END)
+    select = notebox.curselection()
+    selected_file = notebox.get(select[0])
+    name_file_text.insert(END, selected_file)
     filename = 'Notes/' + name_file_text.get()
     with open(filename, 'r',  encoding='utf-8') as file:
         data = json.load(file)
@@ -44,13 +64,6 @@ def read():
     body_text.delete(1.0, END)
     note_title_text.insert(END, data["Title"])
     body_text.insert(END, data["Body"])
-
-
-def select():
-    name_file_text.delete(0, END)
-    select = notebox.curselection()
-    selected_file = notebox.get(select[0])
-    name_file_text.insert(END, selected_file)
 
 
 def show_notes():
@@ -106,7 +119,7 @@ note_title_frame.grid(row=0, column=1)
 note_title_label = Label(note_title_frame, text='Заголовок заметки')
 note_title_label.grid(row=0, column=1, pady=5, padx=5)
 
-note_title_text = Text(note_title_frame, height=5,width=50)
+note_title_text = Text(note_title_frame, height=5, width=50)
 note_title_text.grid(row=1, column=1, pady=5, padx=5)
 
 
@@ -116,7 +129,7 @@ body_frame.grid(row=1, column=1)
 body_label = Label(body_frame, text='Тело заметки')
 body_label.grid(row=0, column=1, pady=5, padx=5)
 
-body_text = Text(body_frame, height=15,width=50)
+body_text = Text(body_frame, height=15, width=50)
 body_text.grid(row=1, column=1, pady=5, padx=5)
 
 button_frame = Frame(frame)
@@ -134,11 +147,13 @@ select_btn.grid(row=9, column=0)
 create_new_note_btn = Button(frame, text='Создать заметку', command=create_btn)
 create_new_note_btn.grid(row=2, column=1)
 
+reformat_note_btn = Button(
+    frame, text='Редактировать заметку', command=reformat)
+reformat_note_btn.grid(row=2, column=2)
+
 name_file_text = Entry(button_frame)
 name_file_text.grid(row=2, column=0, pady=5, padx=5)
 
-read_btn = Button(button_frame, text='Прочитать заметку', command=read)
-read_btn.grid(row=3, column=0, pady=5, padx=5)
 
 delete_btn = Button(button_frame, text='Удалить заметку', command=delete_note)
 delete_btn.grid(row=4, column=0, pady=5, padx=5)
@@ -146,8 +161,8 @@ delete_btn.grid(row=4, column=0, pady=5, padx=5)
 sort_btn = Button(button_frame, text='Сортировать заметки', command=sort_note)
 sort_btn.grid(row=5, column=0, pady=5, padx=5)
 
-name_note_label= Label(button_frame, text="Название файла")
-name_note_label.grid(row=1, column=0, padx=5,pady=5)
+name_note_label = Label(button_frame, text="Название файла")
+name_note_label.grid(row=1, column=0, padx=5, pady=5)
 
 
 show_notes()
