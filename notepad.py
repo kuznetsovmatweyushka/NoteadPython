@@ -111,7 +111,7 @@ window.title("NoteApp by MatveyKuznetsov")
 window.geometry("600x550")
 
 frame = Frame(window)
-frame.grid(row=0, column=0)
+frame.grid(row=0, column=0,padx=5,pady=10)
 
 note_title_frame = Frame(frame)
 note_title_frame.grid(row=0, column=1)
@@ -149,14 +149,14 @@ create_new_note_btn.grid(row=2, column=1)
 
 reformat_note_btn = Button(
     frame, text='Редактировать заметку', command=reformat)
-reformat_note_btn.grid(row=2, column=2)
+reformat_note_btn.grid(row=3, column=1)
 
 name_file_text = Entry(button_frame)
 name_file_text.grid(row=2, column=0, pady=5, padx=5)
 
 
-delete_btn = Button(button_frame, text='Удалить заметку', command=delete_note)
-delete_btn.grid(row=4, column=0, pady=5, padx=5)
+delete_btn = Button(frame, text='Удалить заметку', command=delete_note)
+delete_btn.grid(row=4, column=1, pady=5, padx=5)
 
 sort_btn = Button(button_frame, text='Сортировать заметки', command=sort_note)
 sort_btn.grid(row=5, column=0, pady=5, padx=5)
