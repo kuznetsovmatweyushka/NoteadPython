@@ -102,31 +102,36 @@ frame.grid(row=0, column=0)
 
 note_title_frame = Frame(frame)
 note_title_frame.grid(row=0, column=1)
+
 note_title_label = Label(note_title_frame, text='Заголовок заметки')
 note_title_label.grid(row=0, column=1, pady=5, padx=5)
+
 note_title_text = Text(note_title_frame, height=5,width=50)
 note_title_text.grid(row=1, column=1, pady=5, padx=5)
 
 
 body_frame = Frame(frame)
 body_frame.grid(row=1, column=1)
+
 body_label = Label(body_frame, text='Тело заметки')
 body_label.grid(row=0, column=1, pady=5, padx=5)
+
 body_text = Text(body_frame, height=15,width=50)
 body_text.grid(row=1, column=1, pady=5, padx=5)
 
 button_frame = Frame(frame)
 button_frame.grid(row=1, column=2)
+
 list_notes_text = Label(button_frame, text='Список заметок')
 list_notes_text.grid(row=7, column=0)
+
 notebox = Listbox(button_frame)
 notebox.grid(row=8, column=0)
 
 select_btn = Button(button_frame, text='Выбрать', command=select)
 select_btn.grid(row=9, column=0)
 
-create_new_note_btn = Button(
-    frame, text='Создать заметку', command=create_btn)
+create_new_note_btn = Button(frame, text='Создать заметку', command=create_btn)
 create_new_note_btn.grid(row=2, column=1)
 
 name_file_text = Entry(button_frame)
